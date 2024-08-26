@@ -1,0 +1,16 @@
+{
+  "name": "h2i",
+  "version": "1.0.0",
+  "description": "A simple HTML to Image API",
+  "main": "h2i.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "betas.dev",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2",
+    "puppeteer": "^23.1.1"
+  }
+}
