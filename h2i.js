@@ -2,6 +2,7 @@ const express = require("express");
 const puppeteer = require("puppeteer");
 const app = express();
 const port = process.env.PORT || 8888;
+const renderSecret = process.env.H2I_RENDER_SECRET || "";
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
@@ -10,7 +11,16 @@ app.get("/", (req, res) => {
   res.redirect("https://github.com/bybetas/h2i");
 });
 
-app.post("/convert", async (req, res) => {
+const checkRenderSecret = (req, res, next) => {
+  const providedSecret = req.headers["x-render-secret"];
+
+  if (renderSecret && renderSecret !== providedSecret) {
+    return res.status(403).send("Invalid render secret");
+  }
+  next();
+};
+
+app.post("/convert", checkRenderSecret, async (req, res) => {
   const { html } = req.body;
   const { width, height } = req.query;
 
