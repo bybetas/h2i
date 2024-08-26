@@ -39,9 +39,17 @@ app.post("/convert", checkRenderSecret, async (req, res) => {
         width: parseInt(width),
         height: parseInt(height),
       });
+    } else {
+      // Set a default viewport size if width and height are not provided
+      await page.setViewport({
+        width: 800,
+        height: 600,
+      });
     }
 
     await page.setContent(html, { waitUntil: "networkidle0" });
+
+    await page.waitForTimeout(5000);
 
     const screenshot = await page.screenshot({
       fullPage: !(width && height),
