@@ -54,3 +54,7 @@ X-Render-Secret: your_secret_here
   "html": "<html><body><h1>Hello, World!</h1></body></html>"
 }
 ```
+## License
+MIT License: You can do almost anything with this software, as long as you include the original license and copyright notice.
+
+
