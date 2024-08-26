@@ -1,5 +1,5 @@
 const express = require("express");
-const puppeteer = require("puppeteer");
+const { chromium } = require("playwright");
 const app = express();
 const port = process.env.PORT || 8888;
 const renderSecret = process.env.H2I_RENDER_SECRET || "";
@@ -28,33 +28,44 @@ app.post("/convert", checkRenderSecret, async (req, res) => {
     return res.status(400).send("HTML content is required in the request body");
   }
 
+  let browser;
   try {
-    const browser = await puppeteer.launch({
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    });
+    console.log("Launching browser...");
+    browser = await chromium.launch();
+
+    console.log("Creating new page...");
     const page = await browser.newPage();
 
-    const viewportWidth = width ? parseInt(width) : 800;
-    const viewportHeight = height ? parseInt(height) : 600;
+    const viewportWidth = width ? parseInt(width) : 1280;
+    const viewportHeight = height ? parseInt(height) : 800;
 
-    await page.setViewport({
+    console.log(`Setting viewport to ${viewportWidth}x${viewportHeight}`);
+    await page.setViewportSize({
       width: viewportWidth,
       height: viewportHeight,
     });
 
-    await page.setContent(html, { waitUntil: "networkidle0" });
+    console.log("Setting page content...");
+    await page.setContent(html, { waitUntil: "networkidle" });
 
+    console.log("Taking screenshot...");
     const screenshot = await page.screenshot({
       fullPage: !(width && height),
+      type: "jpeg",
+      quality: 80,
     });
 
-    await browser.close();
-
-    res.set("Content-Type", "image/png");
+    console.log("Screenshot taken, sending response...");
+    res.set("Content-Type", "image/jpeg");
     res.send(screenshot);
   } catch (error) {
     console.error("Error converting HTML to image:", error);
-    res.status(500).send("Error converting HTML to image");
+    res.status(500).send("Error converting HTML to image: " + error.message);
+  } finally {
+    if (browser) {
+      console.log("Closing browser...");
+      await browser.close();
+    }
   }
 });
 
