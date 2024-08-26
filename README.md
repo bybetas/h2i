@@ -39,6 +39,7 @@ X-Render-Secret: your_secret_here
 {
   "html": "<html><body><h1>Hello, World!</h1></body></html>"
 }
+```
 
 ### Specifying dimensions
 
@@ -52,3 +53,4 @@ X-Render-Secret: your_secret_here
 {
   "html": "<html><body><h1>Hello, World!</h1></body></html>"
 }
+```
