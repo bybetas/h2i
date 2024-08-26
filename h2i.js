@@ -14,7 +14,7 @@ app.get("/", (req, res) => {
 const checkRenderSecret = (req, res, next) => {
   const providedSecret = req.headers["x-render-secret"];
 
-  if (renderSecret && renderSecret !== providedSecret) {
+  if (renderSecret && providedSecret !== renderSecret) {
     return res.status(403).send("Invalid render secret");
   }
   next();
@@ -34,22 +34,15 @@ app.post("/convert", checkRenderSecret, async (req, res) => {
     });
     const page = await browser.newPage();
 
-    if (width && height) {
-      await page.setViewport({
-        width: parseInt(width),
-        height: parseInt(height),
-      });
-    } else {
-      // Set a default viewport size if width and height are not provided
-      await page.setViewport({
-        width: 800,
-        height: 600,
-      });
-    }
+    const viewportWidth = width ? parseInt(width) : 800;
+    const viewportHeight = height ? parseInt(height) : 600;
+
+    await page.setViewport({
+      width: viewportWidth,
+      height: viewportHeight,
+    });
 
     await page.setContent(html, { waitUntil: "networkidle0" });
-
-    await page.waitForTimeout(5000);
 
     const screenshot = await page.screenshot({
       fullPage: !(width && height),
