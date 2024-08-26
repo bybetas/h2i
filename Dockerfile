@@ -12,5 +12,4 @@ COPY . .
 
 EXPOSE 8888
 
-# Start the application
-CMD ["node", "your-server-file.js"]
+CMD ["node", "h2i.js"]
