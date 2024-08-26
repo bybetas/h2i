@@ -21,11 +21,13 @@ const checkRenderSecret = (req, res, next) => {
 };
 
 app.post("/convert", checkRenderSecret, async (req, res) => {
-  const { html } = req.body;
+  const { html, url } = req.body;
   const { width, height } = req.query;
 
-  if (!html) {
-    return res.status(400).send("HTML content is required in the request body");
+  if (!html && !url) {
+    return res
+      .status(400)
+      .send("Either HTML content or a URL is required in the request body");
   }
 
   let browser;
@@ -45,8 +47,13 @@ app.post("/convert", checkRenderSecret, async (req, res) => {
       height: viewportHeight,
     });
 
-    console.log("Setting page content...");
-    await page.setContent(html, { waitUntil: "networkidle" });
+    if (url) {
+      console.log(`Navigating to URL: ${url}`);
+      await page.goto(url, { waitUntil: "networkidle" });
+    } else if (html) {
+      console.log("Setting page content...");
+      await page.setContent(html, { waitUntil: "networkidle" });
+    }
 
     console.log("Taking screenshot...");
     const screenshot = await page.screenshot({
@@ -59,8 +66,10 @@ app.post("/convert", checkRenderSecret, async (req, res) => {
     res.set("Content-Type", "image/jpeg");
     res.send(screenshot);
   } catch (error) {
-    console.error("Error converting HTML to image:", error);
-    res.status(500).send("Error converting HTML to image: " + error.message);
+    console.error("Error converting HTML or URL to image:", error);
+    res
+      .status(500)
+      .send("Error converting HTML or URL to image: " + error.message);
   } finally {
     if (browser) {
       console.log("Closing browser...");
