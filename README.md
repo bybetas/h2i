@@ -1,6 +1,6 @@
 # HTML to Image API (H2I)
 
-This API provides a service to convert HTML content or a URL into JPEG images using Playwright. It's designed to be simple, efficient, and deployable on platforms like Railway.
+This API provides a service to convert HTML content or a URL into JPEG images using Playwright. It's designed to be simple, efficient, and deployable on platforms like Railway. Pre-built Docker images are available at `bybetas/h2i:latest`.
 
 ## Endpoints
 
