@@ -83,8 +83,3 @@ X-Render-Secret: your_secret_here
 
 ## License
 MIT License: You can do almost anything with this software, as long as you include the original license and copyright notice.
-
-### Key Changes:
-- **JPEG Format**: Updated the response content type to `image/jpeg` to match the code.
-- **URL Support**: Added support for converting URLs alongside HTML content.
-- **Examples**: Provided examples for both HTML and URL conversions.
