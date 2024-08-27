@@ -21,13 +21,16 @@ const checkRenderSecret = (req, res, next) => {
 };
 
 app.post("/convert", checkRenderSecret, async (req, res) => {
-  const { html, url } = req.body;
+  const { html, url, html64 } = req.body; // Added html64 to the destructured body
   const { width, height } = req.query;
 
-  if (!html && !url) {
+  if (!html && !url && !html64) {
+    // Updated condition to check for html64
     return res
       .status(400)
-      .send("Either HTML content or a URL is required in the request body");
+      .send(
+        "Either HTML content, a URL, or a base64 HTML string is required in the request body"
+      );
   }
 
   let browser;
@@ -53,6 +56,12 @@ app.post("/convert", checkRenderSecret, async (req, res) => {
     } else if (html) {
       console.log("Setting page content...");
       await page.setContent(html, { waitUntil: "networkidle" });
+    } else if (html64) {
+      // Added handling for html64
+      console.log("Decoding base64 HTML content...");
+      const decodedHtml = Buffer.from(html64, "base64").toString("utf-8");
+      console.log("Setting page content from base64...");
+      await page.setContent(decodedHtml, { waitUntil: "networkidle" });
     }
 
     console.log("Taking screenshot...");

@@ -8,18 +8,18 @@ This API provides a service to convert HTML content or a URL into JPEG images us
 
 - **URL**: `/convert`
 - **Method**: `POST`
-- **Description**: Converts provided HTML content or a URL into a JPEG image.
+- **Description**: Converts provided HTML content, a URL, or a base64 HTML string into a JPEG image.
 - **Headers**:
   - `X-Render-Secret` (optional): The secret key for authentication if `H2I_RENDER_SECRET` is set
 - **Body**:
   - Content-Type: `application/json`
-  - Required field: Either `html` (string) - The HTML content to be converted, or `url` (string) - The URL of the page to be converted
+  - Required field: Either `html` (string) - The HTML content to be converted, `url` (string) - The URL of the page to be converted, or `html64` (string) - The base64 encoded HTML content to be converted
 - **Query Parameters**:
   - `width` (optional): Desired width of the output image in pixels
   - `height` (optional): Desired height of the output image in pixels
 - **Response**:
   - Content-Type: `image/jpeg`
-  - The JPEG image of the rendered HTML or URL
+  - The JPEG image of the rendered HTML, URL, or base64 HTML string
 
 ## Authentication
 
