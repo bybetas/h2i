@@ -24,11 +24,10 @@ const checkRenderSecret = (req, res, next) => {
 };
 
 app.post("/convert", checkRenderSecret, async (req, res) => {
-  const { html, url, html64 } = req.body; // Added html64 to the destructured body
+  const { html, url, html64 } = req.body;
   const { width, height } = req.query;
 
   if (!html && !url && !html64) {
-    // Updated condition to check for html64
     return res
       .status(400)
       .send(
@@ -60,7 +59,6 @@ app.post("/convert", checkRenderSecret, async (req, res) => {
       console.log("Setting page content...");
       await page.setContent(html, { waitUntil: "networkidle" });
     } else if (html64) {
-      // Added handling for html64
       console.log("Decoding base64 HTML content...");
       const decodedHtml = Buffer.from(html64, "base64").toString("utf-8");
       console.log("Setting page content from base64...");
