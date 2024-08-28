@@ -1,16 +1,12 @@
-FROM node:21
+FROM node:21.7.0
 
 WORKDIR /app
 
-COPY package*.json ./
-
-RUN npm install
-
-RUN npx playwright install-deps
-
-RUN npx playwright install
-
 COPY . .
+
+RUN npm install && \
+    npx playwright install-deps && \
+    npx playwright install
 
 EXPOSE 8888
 
