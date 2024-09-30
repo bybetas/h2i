@@ -4,7 +4,7 @@ WORKDIR /app
 
 RUN chown -R node:node .
 
-COPY --chown=node:node ./k8s/h2i .
+COPY --chown=node:node . .
 
 RUN npm install && \
     npm install playwright && \
